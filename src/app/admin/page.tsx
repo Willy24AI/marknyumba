@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import {
+  deleteAdminConversationAction,
   deleteAdminListingAction,
   updateAdminListingAction,
   updateUserRoleAction,
 } from "@/app/admin/actions";
+import { listAdminConversations } from "@/lib/data/messages";
 import { categoryLabel, formatPrice, listingStatusLabel } from "@/lib/format";
 import { getAdminUser, listAdminProfiles, listAdminProperties } from "@/lib/data/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -24,8 +26,15 @@ export default async function AdminPage({ searchParams }: PageProps) {
   if (!user) redirect("/auth/login?next=/admin");
   if (!isAdmin) notFound();
 
-  const [{ data: properties, error: propertyError }, { data: profiles, error: profileError }] =
-    await Promise.all([listAdminProperties(supabase), listAdminProfiles(supabase)]);
+  const [
+    { data: properties, error: propertyError },
+    { data: profiles, error: profileError },
+    { data: conversations, error: conversationError },
+  ] = await Promise.all([
+    listAdminProperties(supabase),
+    listAdminProfiles(supabase),
+    listAdminConversations(supabase),
+  ]);
 
   const publishedCount = properties.filter((p) => p.is_published).length;
   const unpublishedCount = properties.length - publishedCount;
@@ -57,11 +66,12 @@ export default async function AdminPage({ searchParams }: PageProps) {
         </p>
       )}
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {[
           { label: "Listings", value: properties.length },
           { label: "Published", value: publishedCount },
           { label: "Unpublished", value: unpublishedCount },
+          { label: "Conversations", value: conversations.length },
           { label: "Admins", value: adminCount },
         ].map((stat) => (
           <div
@@ -159,6 +169,64 @@ export default async function AdminPage({ searchParams }: PageProps) {
       </section>
 
       <section className="mt-10">
+        <h2 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">Conversations</h2>
+        {conversationError ? (
+          <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            {conversationError}
+          </p>
+        ) : (
+          <div className="mt-4 overflow-hidden rounded-3xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+            <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              {conversations.slice(0, 8).map((conversation) => {
+                const property = Array.isArray(conversation.properties)
+                  ? conversation.properties[0]
+                  : conversation.properties;
+
+                return (
+                  <li key={conversation.id} className="grid gap-4 p-4 sm:grid-cols-[1fr_auto] sm:items-center">
+                    <div className="min-w-0">
+                      <Link
+                        href={`/messages/${conversation.id}`}
+                        className="block truncate font-semibold text-zinc-950 hover:text-emerald-700 dark:text-zinc-50"
+                      >
+                        {property?.title ?? "Conversation"}
+                      </Link>
+                      <p className="mt-1 text-sm text-zinc-500">
+                        {property?.city ?? "Uganda"} - updated {new Date(conversation.updated_at).toLocaleString()}
+                      </p>
+                      <p className="mt-1 text-xs text-zinc-400">
+                        Buyer {conversation.buyer_id} - Seller {conversation.seller_id}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        href={`/messages/${conversation.id}`}
+                        className="min-h-10 rounded-xl border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200"
+                      >
+                        Open
+                      </Link>
+                      <form action={deleteAdminConversationAction}>
+                        <input type="hidden" name="id" value={conversation.id} />
+                        <button
+                          type="submit"
+                          className="min-h-10 rounded-xl border border-red-200 px-4 text-sm font-semibold text-red-700 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400"
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </li>
+                );
+              })}
+              {conversations.length === 0 && (
+                <li className="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">No conversations yet.</li>
+              )}
+            </ul>
+          </div>
+        )}
+      </section>
+
+      <section className="mt-10">
         <h2 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">Users</h2>
         {profileError ? (
           <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
@@ -173,7 +241,10 @@ export default async function AdminPage({ searchParams }: PageProps) {
                     <p className="truncate font-semibold text-zinc-950 dark:text-zinc-50">
                       {profile.full_name || "Unnamed user"}
                     </p>
-                    <p className="mt-1 text-xs text-zinc-500">{profile.id}</p>
+                    <p className="mt-1 truncate text-sm text-zinc-500">
+                      {profile.email || "No email stored"}
+                    </p>
+                    <p className="mt-1 text-xs text-zinc-400">{profile.id}</p>
                   </div>
                   <form action={updateUserRoleAction} className="flex gap-2">
                     <input type="hidden" name="id" value={profile.id} />

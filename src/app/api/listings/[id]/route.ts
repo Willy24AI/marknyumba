@@ -1,4 +1,5 @@
 import { jsonError, jsonOk } from "@/lib/api/http";
+import { getProfileRole } from "@/lib/data/admin";
 import { deleteProperty, getPropertyById, updateProperty } from "@/lib/data/properties";
 import type { UpdatePropertyPayload } from "@/lib/data/properties";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -22,7 +23,10 @@ export async function GET(_request: Request, ctx: Ctx) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data, error } = await getPropertyById(supabase, id, user?.id ?? null);
+  const isAdmin = user ? (await getProfileRole(supabase, user.id)) === "admin" : false;
+  const { data, error } = await getPropertyById(supabase, id, user?.id ?? null, {
+    includeUnpublished: isAdmin,
+  });
   if (error) {
     return jsonError(error, 500);
   }

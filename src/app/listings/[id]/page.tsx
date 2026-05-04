@@ -12,6 +12,7 @@ import {
   rentPeriodLabel,
 } from "@/lib/format";
 import { getConversationForPropertyBuyer } from "@/lib/data/messages";
+import { getProfileRole } from "@/lib/data/admin";
 import { getPropertyById, getPropertyMeta } from "@/lib/data/properties";
 import { getBrowseContext } from "@/lib/data/viewer";
 import { regionLabel } from "@/lib/locations/uganda";
@@ -41,7 +42,10 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: property, error } = await getPropertyById(supabase, id, user?.id ?? null);
+  const isAdmin = user ? (await getProfileRole(supabase, user.id)) === "admin" : false;
+  const { data: property, error } = await getPropertyById(supabase, id, user?.id ?? null, {
+    includeUnpublished: isAdmin,
+  });
   if (error || !property) notFound();
 
   const isOwner = user?.id === property.owner_id;
@@ -84,6 +88,12 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
       >
         Back to listings
       </Link>
+
+      {(isOwner || isAdmin) && !property.is_published && (
+        <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm font-medium text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-100">
+          This listing is hidden from public search.
+        </div>
+      )}
 
       {isOwner && (
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 dark:border-emerald-900/50 dark:bg-emerald-950/40">

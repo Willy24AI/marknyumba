@@ -61,7 +61,8 @@ export async function listPropertiesByOwner(
 export async function getPropertyById(
   client: SupabaseClient,
   id: string,
-  viewerUserId?: string | null
+  viewerUserId?: string | null,
+  options: { includeUnpublished?: boolean } = {}
 ): Promise<{ data: PropertyRow | null; error: string | null }> {
   const { data, error } = await client.from("properties").select("*").eq("id", id).maybeSingle();
 
@@ -69,7 +70,7 @@ export async function getPropertyById(
   if (!data) return { data: null, error: null };
 
   const row = data as PropertyRow;
-  if (!row.is_published && row.owner_id !== viewerUserId) {
+  if (!row.is_published && row.owner_id !== viewerUserId && !options.includeUnpublished) {
     return { data: null, error: null };
   }
   return { data: row, error: null };

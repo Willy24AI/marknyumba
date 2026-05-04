@@ -266,7 +266,7 @@ export function parseCreatePropertyFromFormData(formData: FormData): {
     seller_email: formData.get("seller_email"),
     contact_preference: formData.get("contact_preference") ?? "message",
     available_from: formData.get("available_from"),
-    is_published: true,
+    is_published: formData.get("is_published") === "on",
   };
 
   const result = createPropertyPayloadSchema.safeParse(raw);

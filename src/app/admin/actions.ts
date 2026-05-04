@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 import {
+  deleteAdminConversation,
   deleteAdminProperty,
   getAdminUser,
   parseListingStatus,
@@ -56,6 +57,19 @@ export async function deleteAdminListingAction(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/admin");
   revalidatePath("/listings");
+  redirect("/admin");
+}
+
+export async function deleteAdminConversationAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) adminError("Missing conversation id.");
+
+  const supabase = await requireAdminClient();
+  const { error } = await deleteAdminConversation(supabase, id);
+  if (error) adminError(error);
+
+  revalidatePath("/admin");
+  revalidatePath("/messages");
   redirect("/admin");
 }
 

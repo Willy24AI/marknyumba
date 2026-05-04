@@ -26,6 +26,12 @@ as $$
   );
 $$;
 
+drop policy if exists "Profiles are viewable by everyone" on public.profiles;
+drop policy if exists "Users and admins can view profiles" on public.profiles;
+create policy "Users and admins can view profiles"
+  on public.profiles for select
+  using (auth.uid() = id or public.is_admin());
+
 drop policy if exists "Users can insert own profile" on public.profiles;
 create policy "Users can insert own profile"
   on public.profiles for insert
@@ -74,3 +80,13 @@ create policy "Participants can read messages"
         and (c.buyer_id = auth.uid() or c.seller_id = auth.uid())
     )
   );
+
+drop policy if exists "Admins can delete conversations" on public.conversations;
+create policy "Admins can delete conversations"
+  on public.conversations for delete
+  using (public.is_admin());
+
+drop policy if exists "Admins can delete messages" on public.messages;
+create policy "Admins can delete messages"
+  on public.messages for delete
+  using (public.is_admin());

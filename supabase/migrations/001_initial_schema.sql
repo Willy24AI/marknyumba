@@ -3,6 +3,7 @@
 -- Profiles (extends auth.users)
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
+  email text,
   full_name text,
   phone text,
   avatar_url text,
@@ -29,9 +30,10 @@ as $$
 $$;
 
 drop policy if exists "Profiles are viewable by everyone" on public.profiles;
-create policy "Profiles are viewable by everyone"
+drop policy if exists "Users and admins can view profiles" on public.profiles;
+create policy "Users and admins can view profiles"
   on public.profiles for select
-  using (true);
+  using (auth.uid() = id or public.is_admin());
 
 drop policy if exists "Users can insert own profile" on public.profiles;
 create policy "Users can insert own profile"
@@ -58,9 +60,10 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, avatar_url)
+  insert into public.profiles (id, email, full_name, avatar_url)
   values (
     new.id,
+    new.email,
     coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
     new.raw_user_meta_data->>'avatar_url'
   );

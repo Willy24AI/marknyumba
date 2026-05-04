@@ -52,6 +52,11 @@ create policy "Participants can view conversations"
   on public.conversations for select
   using (auth.uid() = buyer_id or auth.uid() = seller_id or public.is_admin());
 
+drop policy if exists "Admins can delete conversations" on public.conversations;
+create policy "Admins can delete conversations"
+  on public.conversations for delete
+  using (public.is_admin());
+
 drop policy if exists "Buyers can start a conversation" on public.conversations;
 create policy "Buyers can start a conversation"
   on public.conversations for insert
@@ -85,6 +90,11 @@ create policy "Participants can read messages"
         and (c.buyer_id = auth.uid() or c.seller_id = auth.uid())
     )
   );
+
+drop policy if exists "Admins can delete messages" on public.messages;
+create policy "Admins can delete messages"
+  on public.messages for delete
+  using (public.is_admin());
 
 drop policy if exists "Participants can send messages" on public.messages;
 create policy "Participants can send messages"

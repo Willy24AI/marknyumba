@@ -34,6 +34,7 @@ type Defaults = Partial<
     | "seller_email"
     | "contact_preference"
     | "available_from"
+    | "is_published"
   >
 >;
 
@@ -164,6 +165,15 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
             />
           </div>
         </div>
+        <label className="flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <input
+            type="checkbox"
+            name="is_published"
+            defaultChecked={d?.is_published ?? true}
+            className="h-4 w-4 rounded border-zinc-300 text-emerald-700"
+          />
+          Show this listing publicly
+        </label>
       </Section>
 
       <Section title="Price">

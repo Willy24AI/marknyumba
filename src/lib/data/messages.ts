@@ -85,7 +85,8 @@ export async function ensureConversation(
 export async function listMessages(
   client: SupabaseClient,
   conversationId: string,
-  userId: string
+  userId: string,
+  options: { includeAll?: boolean } = {}
 ): Promise<{ data: MessageRow[]; error: string | null }> {
   const { data: conv, error: ce } = await client
     .from("conversations")
@@ -95,7 +96,7 @@ export async function listMessages(
 
   if (ce) return { data: [], error: ce.message };
   const c = conv as { buyer_id: string; seller_id: string } | null;
-  if (!c || (c.buyer_id !== userId && c.seller_id !== userId)) {
+  if (!c || (!options.includeAll && c.buyer_id !== userId && c.seller_id !== userId)) {
     return { data: [], error: "Not found" };
   }
 
@@ -138,10 +139,38 @@ export async function listConversationsForUser(
   return { data: (data ?? []) as unknown as ConversationWithProperty[], error: null };
 }
 
+export async function listAdminConversations(
+  client: SupabaseClient
+): Promise<{ data: ConversationWithProperty[]; error: string | null }> {
+  const { data, error } = await client
+    .from("conversations")
+    .select(
+      `
+      id,
+      property_id,
+      buyer_id,
+      seller_id,
+      created_at,
+      updated_at,
+      properties (
+        id,
+        title,
+        image_urls,
+        city
+      )
+    `
+    )
+    .order("updated_at", { ascending: false });
+
+  if (error) return { data: [], error: error.message };
+  return { data: (data ?? []) as unknown as ConversationWithProperty[], error: null };
+}
+
 export async function getConversationById(
   client: SupabaseClient,
   conversationId: string,
-  userId: string
+  userId: string,
+  options: { includeAll?: boolean } = {}
 ): Promise<{ data: ConversationWithProperty | null; error: string | null }> {
   const { data, error } = await client
     .from("conversations")
@@ -166,7 +195,7 @@ export async function getConversationById(
 
   if (error) return { data: null, error: error.message };
   const row = data as unknown as ConversationWithProperty | null;
-  if (!row || (row.buyer_id !== userId && row.seller_id !== userId)) {
+  if (!row || (!options.includeAll && row.buyer_id !== userId && row.seller_id !== userId)) {
     return { data: null, error: null };
   }
   return { data: row, error: null };

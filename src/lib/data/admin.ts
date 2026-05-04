@@ -41,7 +41,7 @@ export async function listAdminProfiles(
 ): Promise<{ data: ProfileRow[]; error: string | null }> {
   const { data, error } = await client
     .from("profiles")
-    .select("id, full_name, phone, avatar_url, role, created_at, updated_at")
+    .select("id, email, full_name, phone, avatar_url, role, created_at, updated_at")
     .order("created_at", { ascending: false });
 
   if (error) return { data: [], error: error.message };
@@ -66,6 +66,14 @@ export async function deleteAdminProperty(
   id: string
 ): Promise<{ error: string | null }> {
   const { error } = await client.from("properties").delete().eq("id", id);
+  return { error: error?.message ?? null };
+}
+
+export async function deleteAdminConversation(
+  client: SupabaseClient,
+  id: string
+): Promise<{ error: string | null }> {
+  const { error } = await client.from("conversations").delete().eq("id", id);
   return { error: error?.message ?? null };
 }
 
