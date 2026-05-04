@@ -23,7 +23,7 @@ export function PropertyCard({ property, viewerUserId, favoriteIds }: Props) {
     <div className="relative h-full">
       <Link
         href={`/listings/${property.id}`}
-        className="group flex h-full overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-xl hover:shadow-zinc-200/70 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-emerald-900 dark:hover:shadow-black/20 sm:flex-col sm:rounded-3xl"
+        className="group flex h-full overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-xl hover:shadow-zinc-200/70 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-900 dark:hover:shadow-black/20 sm:flex-col sm:rounded-3xl"
       >
         <div className="relative aspect-square w-32 shrink-0 overflow-hidden bg-zinc-100 dark:bg-zinc-800 sm:aspect-[4/3] sm:w-auto">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -34,7 +34,7 @@ export function PropertyCard({ property, viewerUserId, favoriteIds }: Props) {
           />
           <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/45 to-transparent sm:h-24" />
           <div className="absolute left-2 top-2 flex flex-wrap gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
-            <span className="rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 shadow-sm dark:bg-zinc-900/95 dark:text-emerald-400 sm:px-2.5 sm:py-1 sm:text-xs">
+            <span className="rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-semibold text-brand-800 shadow-sm dark:bg-zinc-900/95 dark:text-brand-400 sm:px-2.5 sm:py-1 sm:text-xs">
               {listingLabel(property.listing_type)}
             </span>
             {property.listing_status !== "available" && (

@@ -98,7 +98,7 @@ export function SignupForm() {
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />
         </div>
         <div>
@@ -112,7 +112,7 @@ export function SignupForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />
         </div>
         <div>
@@ -127,13 +127,13 @@ export function SignupForm() {
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />
           <p className="mt-1 text-xs text-zinc-500">At least 6 characters.</p>
         </div>
         {message && (
           <p
-            className={`text-sm ${message.includes("Check your email") ? "text-emerald-700 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}
+            className={`text-sm ${message.includes("Check your email") ? "text-brand-700 dark:text-brand-400" : "text-red-600 dark:text-red-400"}`}
             role="status"
           >
             {message}
@@ -142,7 +142,7 @@ export function SignupForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl bg-emerald-700 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:opacity-50 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+          className="w-full rounded-xl bg-brand-700 py-3 text-sm font-semibold text-white transition hover:bg-brand-800 disabled:opacity-50 dark:bg-brand-600 dark:hover:bg-brand-500"
         >
           {loading ? "Please wait…" : "Create account"}
         </button>
@@ -150,7 +150,7 @@ export function SignupForm() {
 
       <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
         Already have an account?{" "}
-        <Link href="/auth/login" className="font-medium text-emerald-700 hover:underline dark:text-emerald-400">
+        <Link href="/auth/login" className="font-medium text-brand-700 hover:underline dark:text-brand-400">
           Sign in
         </Link>
       </p>

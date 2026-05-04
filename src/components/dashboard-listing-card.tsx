@@ -20,7 +20,7 @@ export function DashboardListingCard({ property }: { property: PropertyRow }) {
       </Link>
       <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
         <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200">
+          <span className="rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-900 dark:bg-brand-900/40 dark:text-brand-200">
             {listingLabel(property.listing_type)}
           </span>
           <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
@@ -52,7 +52,7 @@ export function DashboardListingCard({ property }: { property: PropertyRow }) {
           </Link>
           <Link
             href={`/dashboard/listings/${property.id}/edit`}
-            className="rounded-lg bg-emerald-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            className="rounded-lg bg-brand-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500"
           >
             Edit
           </Link>

@@ -19,7 +19,7 @@ export default async function NewListingPage({
     <div className="mx-auto max-w-2xl flex-1 px-4 py-10 sm:px-6">
       <Link
         href="/dashboard"
-        className="mb-6 inline-flex text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+        className="mb-6 inline-flex text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
       >
         ← Dashboard
       </Link>
@@ -41,7 +41,7 @@ export default async function NewListingPage({
 
         <button
           type="submit"
-          className="w-full rounded-xl bg-emerald-700 py-3 text-sm font-semibold text-white hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:w-auto sm:px-10"
+          className="w-full rounded-xl bg-brand-700 py-3 text-sm font-semibold text-white hover:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500 sm:w-auto sm:px-10"
         >
           Publish listing
         </button>

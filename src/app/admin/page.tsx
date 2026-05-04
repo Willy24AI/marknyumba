@@ -44,7 +44,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
     <main className="mx-auto max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-400">
             Site control
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
@@ -87,7 +87,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
       <section className="mt-10">
         <div className="flex items-center justify-between gap-4">
           <h2 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">Listings</h2>
-          <Link href="/dashboard/listings/new" className="text-sm font-semibold text-emerald-700 hover:underline">
+          <Link href="/dashboard/listings/new" className="text-sm font-semibold text-brand-700 hover:underline">
             Add listing
           </Link>
         </div>
@@ -105,7 +105,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
                       <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                         {categoryLabel(property.property_category)}
                       </span>
-                      <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-800 dark:bg-brand-950 dark:text-brand-300">
                         {listingStatusLabel(property.listing_status)}
                       </span>
                       {!property.is_published && (
@@ -116,7 +116,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
                     </div>
                     <Link
                       href={`/listings/${property.id}`}
-                      className="mt-2 block truncate font-semibold text-zinc-950 hover:text-emerald-700 dark:text-zinc-50"
+                      className="mt-2 block truncate font-semibold text-zinc-950 hover:text-brand-700 dark:text-zinc-50"
                     >
                       {property.title}
                     </Link>
@@ -143,7 +143,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
                       </label>
                       <button
                         type="submit"
-                        className="min-h-10 rounded-xl bg-emerald-700 px-4 text-sm font-semibold text-white hover:bg-emerald-800"
+                        className="min-h-10 rounded-xl bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800"
                       >
                         Save
                       </button>
@@ -187,7 +187,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
                     <div className="min-w-0">
                       <Link
                         href={`/messages/${conversation.id}`}
-                        className="block truncate font-semibold text-zinc-950 hover:text-emerald-700 dark:text-zinc-50"
+                        className="block truncate font-semibold text-zinc-950 hover:text-brand-700 dark:text-zinc-50"
                       >
                         {property?.title ?? "Conversation"}
                       </Link>

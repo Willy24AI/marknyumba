@@ -25,7 +25,7 @@ export default async function FavoritesPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Saved listings</h1>
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">
           Listings you have favorited while signed in.{" "}
-          <Link href="/listings" className="font-medium text-emerald-700 hover:underline dark:text-emerald-400">
+          <Link href="/listings" className="font-medium text-brand-700 hover:underline dark:text-brand-400">
             Browse more
           </Link>
         </p>

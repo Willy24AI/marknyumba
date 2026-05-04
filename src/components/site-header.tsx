@@ -31,7 +31,7 @@ export async function SiteHeader() {
           href="/"
           className="flex items-center gap-2 text-base font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-lg"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-700 text-xs font-bold text-white shadow-sm shadow-emerald-900/20 sm:h-9 sm:w-9 sm:text-sm">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-700 text-xs font-bold text-white shadow-sm shadow-brand-900/20 sm:h-9 sm:w-9 sm:text-sm">
             MN
           </span>
           <span className="hidden sm:inline">Mark Nyumba</span>
@@ -56,7 +56,7 @@ export async function SiteHeader() {
           </Link>
           <Link
             href="/dashboard/listings/new"
-            className="hidden rounded-full bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-emerald-900/15 transition hover:bg-emerald-800 sm:inline-flex dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            className="hidden rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-900/15 transition hover:bg-brand-800 sm:inline-flex dark:bg-brand-600 dark:hover:bg-brand-500"
           >
             List property
           </Link>

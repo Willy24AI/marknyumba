@@ -43,7 +43,7 @@ export default function RootLayout({
                 href="/"
                 className="inline-flex items-center gap-2 text-lg font-semibold text-zinc-950 dark:text-zinc-50"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-700 text-sm font-bold text-white">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-700 text-sm font-bold text-white">
                   MN
                 </span>
                 Mark Nyumba
@@ -56,13 +56,13 @@ export default function RootLayout({
             <div>
               <p className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">Explore</p>
               <nav className="mt-4 flex flex-col gap-3 text-sm text-zinc-600 dark:text-zinc-400">
-                <Link href="/listings?listing_type=sale" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/listings?listing_type=sale" className="hover:text-brand-700 dark:hover:text-brand-400">
                   Homes for sale
                 </Link>
-                <Link href="/listings?listing_type=rent" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/listings?listing_type=rent" className="hover:text-brand-700 dark:hover:text-brand-400">
                   Rentals
                 </Link>
-                <Link href="/listings?property_category=land" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/listings?property_category=land" className="hover:text-brand-700 dark:hover:text-brand-400">
                   Land
                 </Link>
               </nav>
@@ -70,13 +70,13 @@ export default function RootLayout({
             <div>
               <p className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">Account</p>
               <nav className="mt-4 flex flex-col gap-3 text-sm text-zinc-600 dark:text-zinc-400">
-                <Link href="/auth/login" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/auth/login" className="hover:text-brand-700 dark:hover:text-brand-400">
                   Sign in
                 </Link>
-                <Link href="/favorites" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/favorites" className="hover:text-brand-700 dark:hover:text-brand-400">
                   Saved listings
                 </Link>
-                <Link href="/messages" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/messages" className="hover:text-brand-700 dark:hover:text-brand-400">
                   Messages
                 </Link>
               </nav>
@@ -84,13 +84,13 @@ export default function RootLayout({
             <div>
               <p className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">For Sellers</p>
               <nav className="mt-4 flex flex-col gap-3 text-sm text-zinc-600 dark:text-zinc-400">
-                <Link href="/dashboard/listings/new" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/dashboard/listings/new" className="hover:text-brand-700 dark:hover:text-brand-400">
                   List property
                 </Link>
-                <Link href="/dashboard" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/dashboard" className="hover:text-brand-700 dark:hover:text-brand-400">
                   Dashboard
                 </Link>
-                <Link href="/api/health" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                <Link href="/api/health" className="hover:text-brand-700 dark:hover:text-brand-400">
                   System status
                 </Link>
               </nav>

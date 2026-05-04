@@ -170,7 +170,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
             type="checkbox"
             name="is_published"
             defaultChecked={d?.is_published ?? true}
-            className="h-4 w-4 rounded border-zinc-300 text-emerald-700"
+            className="h-4 w-4 rounded border-zinc-300 text-brand-700"
           />
           Show this listing publicly
         </label>
@@ -230,7 +230,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
             type="checkbox"
             name="price_negotiable"
             defaultChecked={Boolean(d?.price_negotiable)}
-            className="h-4 w-4 rounded border-zinc-300 text-emerald-700"
+            className="h-4 w-4 rounded border-zinc-300 text-brand-700"
           />
           Price is negotiable
         </label>
@@ -409,7 +409,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
                   name="amenities"
                   value={amenity}
                   defaultChecked={selectedAmenities.has(amenity)}
-                  className="h-4 w-4 rounded border-zinc-300 text-emerald-700"
+                  className="h-4 w-4 rounded border-zinc-300 text-brand-700"
                 />
                 {amenity}
               </label>

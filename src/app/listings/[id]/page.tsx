@@ -84,7 +84,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
     <article className="mx-auto max-w-4xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
       <Link
         href="/listings"
-        className="mb-5 inline-flex text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+        className="mb-5 inline-flex text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
       >
         Back to listings
       </Link>
@@ -96,11 +96,11 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
       )}
 
       {isOwner && (
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 dark:border-emerald-900/50 dark:bg-emerald-950/40">
-          <p className="text-sm font-medium text-emerald-950 dark:text-emerald-100">You own this listing.</p>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-200 bg-brand-50/80 px-4 py-3 dark:border-brand-900/50 dark:bg-brand-950/40">
+          <p className="text-sm font-medium text-brand-950 dark:text-brand-100">You own this listing.</p>
           <Link
             href={`/dashboard/listings/${property.id}/edit`}
-            className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            className="rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500"
           >
             Edit listing
           </Link>
@@ -115,7 +115,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
           </div>
           <div className="flex flex-col justify-center p-5 sm:col-span-2 sm:p-8">
             <div className="mb-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200">
+              <span className="rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-semibold text-brand-900 dark:bg-brand-900/40 dark:text-brand-200">
                 {listingLabel(property.listing_type)}
               </span>
               <span className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
@@ -140,7 +140,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
                 />
               ) : null}
             </div>
-            <p className="mt-3 text-2xl font-bold text-emerald-800 dark:text-emerald-400">
+            <p className="mt-3 text-2xl font-bold text-brand-800 dark:text-brand-400">
               {formatPrice(Number(property.price), property.currency)}
               {property.listing_type === "rent" && (
                 <span className="text-base font-normal text-zinc-500"> / {rentPeriodLabel(property.rent_period)}</span>
@@ -193,7 +193,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
                 {property.amenities.map((amenity) => (
                   <span
                     key={amenity}
-                    className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200"
+                    className="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-900 dark:bg-brand-950 dark:text-brand-200"
                   >
                     {amenity}
                   </span>
@@ -247,7 +247,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
                     href={link.href}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:text-emerald-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
+                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:text-brand-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
                   >
                     {link.label}
                   </a>
@@ -267,12 +267,12 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
           <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
             <Link
               href={`/auth/login?next=/listings/${id}`}
-              className="font-semibold text-emerald-700 hover:underline dark:text-emerald-400"
+              className="font-semibold text-brand-700 hover:underline dark:text-brand-400"
             >
               Sign in
             </Link>{" "}
             or{" "}
-            <Link href="/auth/signup" className="font-semibold text-emerald-700 hover:underline dark:text-emerald-400">
+            <Link href="/auth/signup" className="font-semibold text-brand-700 hover:underline dark:text-brand-400">
               create an account
             </Link>{" "}
             to message the seller or save this listing to favorites.
@@ -290,7 +290,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
             {existingConv ? (
               <Link
                 href={`/messages/${existingConv.id}`}
-                className="inline-flex text-sm font-semibold text-emerald-700 hover:underline dark:text-emerald-400"
+                className="inline-flex text-sm font-semibold text-brand-700 hover:underline dark:text-brand-400"
               >
                 Open full conversation
               </Link>

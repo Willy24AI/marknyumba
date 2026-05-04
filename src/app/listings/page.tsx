@@ -82,7 +82,7 @@ export default async function ListingsPage({
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-10 lg:px-8">
           <div className="grid gap-4 sm:gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="hidden text-sm font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400 sm:block">
+              <p className="hidden text-sm font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-400 sm:block">
                 Property search
               </p>
               <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 sm:mt-2 sm:text-4xl">
@@ -105,7 +105,7 @@ export default async function ListingsPage({
                   id="listing_type"
                   name="listing_type"
                   defaultValue={listingType ?? ""}
-                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
+                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
                 >
                   {listingOptions.map((o) => (
                     <option key={o.label} value={o.value}>
@@ -122,7 +122,7 @@ export default async function ListingsPage({
                   id="property_category"
                   name="property_category"
                   defaultValue={category ?? ""}
-                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
+                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
                 >
                   {categoryOptions.map((o) => (
                     <option key={o.label} value={o.value}>
@@ -139,7 +139,7 @@ export default async function ListingsPage({
                   id="region"
                   name="region"
                   defaultValue={region ?? ""}
-                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
+                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
                 >
                   <option value="">All Uganda</option>
                   {ugandaRegions.map((r) => (
@@ -160,7 +160,7 @@ export default async function ListingsPage({
                   placeholder="Kampala"
                   defaultValue={cityFilter ?? ""}
                   list="listings-uganda-town-options"
-                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
+                  className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:min-h-12"
                 />
                 <datalist id="listings-uganda-town-options">
                   {ugandaTownOptions.map((town) => (
@@ -171,7 +171,7 @@ export default async function ListingsPage({
               <div className="col-span-2 flex items-end gap-2 lg:col-span-1">
                 <button
                   type="submit"
-                  className="min-h-11 flex-1 rounded-2xl bg-emerald-700 px-5 text-sm font-semibold text-white hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:min-h-12"
+                  className="min-h-11 flex-1 rounded-2xl bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500 sm:min-h-12"
                 >
                   Search
                 </button>
@@ -199,13 +199,13 @@ export default async function ListingsPage({
             </p>
           </div>
           <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 text-sm sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
-            <Link className="rounded-full bg-white px-3 py-1.5 font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-emerald-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800" href={buildHref({ listing_type: "sale", property_category: "" })}>
+            <Link className="rounded-full bg-white px-3 py-1.5 font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-brand-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800" href={buildHref({ listing_type: "sale", property_category: "" })}>
               For sale
             </Link>
-            <Link className="rounded-full bg-white px-3 py-1.5 font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-emerald-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800" href={buildHref({ listing_type: "rent", property_category: "" })}>
+            <Link className="rounded-full bg-white px-3 py-1.5 font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-brand-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800" href={buildHref({ listing_type: "rent", property_category: "" })}>
               Rentals
             </Link>
-            <Link className="rounded-full bg-white px-3 py-1.5 font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-emerald-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800" href={buildHref({ property_category: "land", listing_type: "sale" })}>
+            <Link className="rounded-full bg-white px-3 py-1.5 font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-brand-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800" href={buildHref({ property_category: "land", listing_type: "sale" })}>
               Land
             </Link>
           </div>

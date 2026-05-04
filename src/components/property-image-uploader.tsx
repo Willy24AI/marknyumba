@@ -69,7 +69,7 @@ export function PropertyImageUploader() {
         multiple
         disabled={uploading}
         onChange={onFileChange}
-        className="mt-3 block w-full text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-700 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-emerald-800 dark:text-zinc-400 dark:file:bg-emerald-600"
+        className="mt-3 block w-full text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-700 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-brand-800 dark:text-zinc-400 dark:file:bg-brand-600"
       />
       {uploading && <p className="mt-2 text-xs text-zinc-500">Uploading…</p>}
       {hint && <p className="mt-2 text-xs text-red-600 dark:text-red-400">{hint}</p>}

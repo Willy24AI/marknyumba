@@ -70,7 +70,7 @@ export default async function MessagesPage({ searchParams }: PageProps) {
             <li key={c.id}>
               <Link
                 href={`/messages/${c.id}`}
-                className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-4 transition hover:border-emerald-200 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-emerald-900"
+                className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-4 transition hover:border-brand-200 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-900"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img

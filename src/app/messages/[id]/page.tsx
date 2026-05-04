@@ -46,7 +46,7 @@ export default async function MessageThreadPage({ params, searchParams }: Props)
     <div className="mx-auto flex max-w-2xl flex-1 flex-col px-4 py-10 sm:px-6">
       <Link
         href={isAdmin ? "/admin" : "/messages"}
-        className="mb-6 inline-flex text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+        className="mb-6 inline-flex text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
       >
         {isAdmin ? "Back to admin" : "All messages"}
       </Link>
@@ -55,7 +55,7 @@ export default async function MessageThreadPage({ params, searchParams }: Props)
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{title}</h1>
         <Link
           href={`/listings/${propertyId}`}
-          className="mt-1 inline-block text-sm text-emerald-700 hover:underline dark:text-emerald-400"
+          className="mt-1 inline-block text-sm text-brand-700 hover:underline dark:text-brand-400"
         >
           View listing →
         </Link>
@@ -72,14 +72,14 @@ export default async function MessageThreadPage({ params, searchParams }: Props)
               key={m.id}
               className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
                 mine
-                  ? "ml-auto bg-emerald-700 text-white dark:bg-emerald-600"
+                  ? "ml-auto bg-brand-700 text-white dark:bg-brand-600"
                   : "mr-auto border border-zinc-200 bg-white text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
               }`}
             >
               <p className="whitespace-pre-wrap">{m.body}</p>
               <p
                 className={`mt-1 text-[10px] uppercase tracking-wide ${
-                  mine ? "text-emerald-100/90" : "text-zinc-400"
+                  mine ? "text-brand-100/90" : "text-zinc-400"
                 }`}
               >
                 {new Date(m.created_at).toLocaleString()}

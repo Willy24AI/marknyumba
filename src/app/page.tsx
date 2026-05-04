@@ -76,7 +76,7 @@ export default async function Home() {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,9,11,0.86),rgba(9,9,11,0.58),rgba(9,9,11,0.2))]" />
         <div className="relative mx-auto grid max-w-7xl gap-5 px-4 pb-5 pt-6 sm:min-h-[680px] sm:content-end sm:gap-10 sm:px-6 sm:pb-10 sm:pt-20 lg:grid-cols-[1.05fr_0.75fr] lg:items-end lg:px-8 lg:pb-16">
           <div className="max-w-3xl">
-            <p className="hidden rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-semibold text-emerald-100 backdrop-blur sm:inline-flex">
+            <p className="hidden rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-semibold text-brand-100 backdrop-blur sm:inline-flex">
               Uganda real estate marketplace
             </p>
             <h1 className="max-w-sm text-3xl font-semibold tracking-tight sm:mt-5 sm:max-w-none sm:text-6xl">
@@ -92,7 +92,7 @@ export default async function Home() {
             <div className="mt-5 hidden flex-col gap-3 sm:mt-8 sm:flex sm:flex-row">
               <Link
                 href="/listings"
-                className="inline-flex justify-center rounded-full bg-white px-7 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-black/20 transition hover:bg-emerald-50"
+                className="inline-flex justify-center rounded-full bg-white px-7 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-black/20 transition hover:bg-brand-50"
               >
                 Browse listings
               </Link>
@@ -116,7 +116,7 @@ export default async function Home() {
                     id="home-listing"
                     name="listing_type"
                     defaultValue=""
-                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
+                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
                   >
                     <option value="">Buy or rent</option>
                     <option value="sale">Buy</option>
@@ -131,7 +131,7 @@ export default async function Home() {
                     id="home-region"
                     name="region"
                     defaultValue=""
-                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
+                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
                   >
                     <option value="">All Uganda</option>
                     {ugandaRegions.map((region) => (
@@ -151,7 +151,7 @@ export default async function Home() {
                     type="search"
                     placeholder="Kampala, Gulu, Mbarara"
                     list="home-uganda-town-options"
-                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
+                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
                   />
                   <datalist id="home-uganda-town-options">
                     {ugandaTownOptions.map((town) => (
@@ -166,7 +166,7 @@ export default async function Home() {
                   <select
                     id="home-type"
                     name="property_category"
-                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
+                    className="min-h-11 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:min-h-12 sm:px-4"
                   >
                     <option value="">Any property</option>
                     <option value="house">House</option>
@@ -178,7 +178,7 @@ export default async function Home() {
               </div>
               <button
                 type="submit"
-                className="min-h-11 rounded-2xl bg-emerald-700 px-5 text-sm font-semibold text-white transition hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:min-h-12"
+                className="min-h-11 rounded-2xl bg-brand-700 px-5 text-sm font-semibold text-white transition hover:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500 sm:min-h-12"
               >
                 Search property
               </button>
@@ -191,7 +191,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-7xl gap-4 px-4 py-6 sm:grid-cols-3 sm:px-6 lg:px-8">
           {quickStats.map((stat) => (
             <div key={stat.label} className="flex items-center gap-3">
-              <p className="text-2xl font-semibold text-emerald-700 dark:text-emerald-400">{stat.value}</p>
+              <p className="text-2xl font-semibold text-brand-700 dark:text-brand-400">{stat.value}</p>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">{stat.label}</p>
             </div>
           ))}
@@ -202,14 +202,14 @@ export default async function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <p className="hidden text-sm font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400 sm:block">
+              <p className="hidden text-sm font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-400 sm:block">
                 Featured listings
               </p>
               <h2 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 sm:mt-2 sm:text-3xl">
                 Latest listings
               </h2>
             </div>
-            <Link href="/listings?limit=24" className="text-sm font-semibold text-emerald-700 hover:underline dark:text-emerald-400">
+            <Link href="/listings?limit=24" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-400">
               View all
             </Link>
           </div>
@@ -228,7 +228,7 @@ export default async function Home() {
       <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <p className="hidden text-sm font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400 sm:block">
+            <p className="hidden text-sm font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-400 sm:block">
               Nationwide coverage
             </p>
             <h2 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 sm:mt-2 sm:text-3xl">
@@ -240,7 +240,7 @@ export default async function Home() {
               <Link
                 key={town.label}
                 href={town.href}
-                className="rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-emerald-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800"
+                className="rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-zinc-700 ring-1 ring-zinc-200 hover:text-brand-700 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-800"
               >
                 {town.label}
               </Link>
@@ -273,7 +273,7 @@ export default async function Home() {
       <section className="hidden border-y border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 sm:block">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[0.8fr_1fr] lg:px-8">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-400">
               Built for trust
             </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
@@ -301,7 +301,7 @@ export default async function Home() {
         <div className="overflow-hidden rounded-[2rem] bg-zinc-950 text-white shadow-2xl shadow-zinc-300/30 dark:shadow-black/40">
           <div className="grid gap-8 p-8 md:grid-cols-[1fr_0.75fr] md:p-10 lg:p-12">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-300">For property owners</p>
+              <p className="text-sm font-semibold uppercase tracking-wide text-brand-300">For property owners</p>
               <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
                 Publish a listing, upload photos, and manage buyer conversations.
               </h2>
@@ -313,7 +313,7 @@ export default async function Home() {
             <div className="flex flex-col justify-end gap-3 sm:flex-row md:flex-col">
               <Link
                 href="/dashboard/listings/new"
-                className="inline-flex justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-50"
+                className="inline-flex justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-brand-50"
               >
                 Create listing
               </Link>
