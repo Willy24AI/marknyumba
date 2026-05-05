@@ -153,7 +153,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
 
   return (
     <article
-      className={`mx-auto max-w-4xl flex-1 px-4 pt-8 sm:px-6 sm:py-10 ${
+      className={`mx-auto w-full max-w-7xl flex-1 px-4 pt-8 sm:px-6 sm:py-10 lg:px-8 ${
         contactLinks.length > 0 ? "pb-32" : "pb-8"
       }`}
     >
@@ -182,13 +182,14 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
         </div>
       )}
 
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+        <div className="min-w-0">
       <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="grid gap-0 sm:grid-cols-5">
-          <div className="relative aspect-[4/3] bg-zinc-100 sm:col-span-3 sm:aspect-auto sm:min-h-[320px] dark:bg-zinc-800">
+        <div className="relative aspect-[4/3] bg-zinc-100 dark:bg-zinc-800 lg:aspect-[16/9]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={images[0]} alt="" className="h-full w-full object-cover" />
           </div>
-          <div className="flex flex-col justify-center p-5 sm:col-span-2 sm:p-8">
+          <div className="p-5 sm:p-8">
             <div className="mb-3 flex flex-wrap gap-2">
               <span className="rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-semibold text-brand-900 dark:bg-brand-900/40 dark:text-brand-200">
                 {listingLabel(property.listing_type)}
@@ -203,7 +204,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
               )}
             </div>
             <div className="flex items-start justify-between gap-3">
-              <h1 className="flex-1 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+              <h1 className="flex-1 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
                 {property.title}
               </h1>
               {userId ? (
@@ -215,7 +216,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
                 />
               ) : null}
             </div>
-            <p className="mt-3 text-2xl font-bold text-brand-800 dark:text-brand-400">
+            <p className="mt-4 text-2xl font-bold text-brand-800 dark:text-brand-400 sm:text-3xl">
               {formatPrice(Number(property.price), property.currency)}
               {property.listing_type === "rent" && (
                 <span className="text-base font-normal text-zinc-500"> / {rentPeriodLabel(property.rent_period)}</span>
@@ -230,7 +231,7 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
                 .join(" - ")}
             </p>
             {facts.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2 text-xs text-zinc-600 dark:text-zinc-400">
+              <div className="mt-5 flex flex-wrap gap-2 text-xs text-zinc-600 dark:text-zinc-400 sm:text-sm">
                 {facts.map((fact) => (
                   <span key={fact} className="rounded-full bg-zinc-100 px-2.5 py-1 dark:bg-zinc-800">
                     {fact}
@@ -239,7 +240,6 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
               </div>
             )}
           </div>
-        </div>
         <div className="border-t border-zinc-100 p-6 sm:p-8 dark:border-zinc-800">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">Description</h2>
           <p className="mt-3 whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
@@ -303,7 +303,10 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
         </section>
       )}
 
-      <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
+        </div>
+
+      <aside className="lg:sticky lg:top-24">
+      <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-8 lg:mt-0 lg:p-6">
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Contact seller</h2>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
           Ask about viewings, price, or what is included. Your messages stay on Mark Nyumba.
@@ -334,35 +337,35 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
               <SellerRating summary={sellerSummary} compact />
             </div>
           </div>
-          <span className="hidden rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 sm:inline-flex">
+          <span className="hidden rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 xl:inline-flex">
             View profile
           </span>
         </Link>
 
-        {(property.seller_name || contactLinks.length > 0) && (
+        {contactLinks.length > 0 && (
+          <div className="mt-4 hidden grid-cols-1 gap-2 sm:grid">
+            {contactLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noreferrer" : undefined}
+                className="flex min-h-14 items-center gap-3 rounded-2xl border border-zinc-200 bg-white px-3 text-sm font-semibold text-zinc-800 shadow-sm transition hover:border-brand-200 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:border-brand-900 dark:hover:bg-zinc-900"
+              >
+                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-1 ${contactIconTone(link.kind)}`}>
+                  <ContactIcon kind={link.kind} />
+                </span>
+                <span className="min-w-0 truncate">{link.label}</span>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {property.seller_name && (
           <div
-            className={`mt-4 rounded-2xl bg-zinc-50 p-4 text-sm dark:bg-zinc-950 ${
-              property.seller_name ? "" : "hidden sm:block"
-            }`}
+            className="mt-4 rounded-2xl bg-zinc-50 p-4 text-sm dark:bg-zinc-950"
           >
-            {property.seller_name && (
               <p className="font-semibold text-zinc-900 dark:text-zinc-100">{property.seller_name}</p>
-            )}
-            {contactLinks.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {contactLinks.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target={link.external ? "_blank" : undefined}
-                    rel={link.external ? "noreferrer" : undefined}
-                    className="hidden rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:text-brand-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 sm:inline-flex"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            )}
           </div>
         )}
 
@@ -411,6 +414,8 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
           </div>
         )}
       </section>
+      </aside>
+      </div>
 
       {contactLinks.length > 0 && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-white/95 px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3 shadow-[0_-16px_40px_rgba(24,24,27,0.18)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/95 sm:hidden">

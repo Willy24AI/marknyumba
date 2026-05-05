@@ -26,7 +26,7 @@ export default async function EditListingPage({ params, searchParams }: Props) {
   if (error || !property || property.owner_id !== user.id) notFound();
 
   return (
-    <div className="mx-auto max-w-2xl flex-1 px-4 py-10 sm:px-6">
+    <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
       <Link
         href="/dashboard"
         className="mb-6 inline-flex text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
@@ -36,7 +36,9 @@ export default async function EditListingPage({ params, searchParams }: Props) {
       <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
         Edit listing
       </h1>
-      <p className="mt-2 text-zinc-600 dark:text-zinc-400">Update details for: {property.title}</p>
+      <p className="mt-2 max-w-2xl text-zinc-600 dark:text-zinc-400">
+        Update details for: {property.title}. The form will adapt if you change the property type or listing goal.
+      </p>
 
       {q.error && (
         <p className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200">
@@ -44,7 +46,10 @@ export default async function EditListingPage({ params, searchParams }: Props) {
         </p>
       )}
 
-      <form action={updatePropertyAction} className="mt-8 space-y-6">
+      <form
+        action={updatePropertyAction}
+        className="mt-8 space-y-6 rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-6"
+      >
         <input type="hidden" name="property_id" value={property.id} />
         <PropertyFormFields defaults={property} />
 

@@ -1,6 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import { PropertyImageUploader } from "@/components/property-image-uploader";
 import { ugandaRegions, ugandaTownOptions } from "@/lib/locations/uganda";
-import type { PropertyRow } from "@/types/property";
+import type { ListingType, PropertyCategory, PropertyRow } from "@/types/property";
 
 type Defaults = Partial<
   Pick<
@@ -43,44 +46,276 @@ const amenityOptions = [
   "Water",
   "Security",
   "Parking",
+  "CCTV",
+  "Boundary wall",
+  "Gated access",
+  "Backup generator",
+  "Solar power",
+  "Borehole",
+  "Water tank",
+  "Septic tank",
   "Garden",
   "Balcony",
   "Servant quarter",
   "Internet",
   "Air conditioning",
+  "Built-in wardrobes",
+  "Kitchen cabinets",
+  "Tiled floors",
+  "Water heater",
+  "Laundry area",
+  "Private compound",
+  "Gated community",
+  "Pets allowed",
+  "Swimming pool",
+  "Gym",
+  "Lift / elevator",
+  "Visitors parking",
+  "Clubhouse",
   "Paved access",
   "Near main road",
+  "Public transport nearby",
   "School nearby",
   "Hospital nearby",
   "Shopping nearby",
+  "Land title available",
+  "Freehold title",
+  "Mailo title",
+  "Leasehold title",
+  "Customary ownership",
+  "Surveyed land",
+  "Boundary markers",
+  "Corner plot",
+  "Road frontage",
+  "Tarmac road access",
+  "Murram road access",
+  "Electricity nearby",
+  "Water nearby",
+  "Suitable for residential",
+  "Suitable for commercial",
+  "Suitable for farming",
+  "Zoned commercial",
+  "Loading bay",
+  "Shop frontage",
+  "Reception area",
+  "Customer washrooms",
+  "Kitchenette",
+  "Storage room",
+  "High foot traffic",
+  "Three-phase power",
 ];
+
+const amenityOptionsByCategory: Record<PropertyCategory, string[]> = {
+  house: [
+    "Electricity",
+    "Water",
+    "Security",
+    "CCTV",
+    "Parking",
+    "Boundary wall",
+    "Gated access",
+    "Backup generator",
+    "Solar power",
+    "Borehole",
+    "Water tank",
+    "Septic tank",
+    "Garden",
+    "Balcony",
+    "Servant quarter",
+    "Internet",
+    "Air conditioning",
+    "Built-in wardrobes",
+    "Kitchen cabinets",
+    "Tiled floors",
+    "Water heater",
+    "Laundry area",
+    "Private compound",
+    "Gated community",
+    "Pets allowed",
+    "Paved access",
+    "Near main road",
+    "Public transport nearby",
+    "School nearby",
+    "Hospital nearby",
+    "Shopping nearby",
+  ],
+  apartment: [
+    "Electricity",
+    "Water",
+    "Security",
+    "CCTV",
+    "Parking",
+    "Visitors parking",
+    "Balcony",
+    "Internet",
+    "Air conditioning",
+    "Built-in wardrobes",
+    "Kitchen cabinets",
+    "Tiled floors",
+    "Water heater",
+    "Laundry area",
+    "Lift / elevator",
+    "Swimming pool",
+    "Gym",
+    "Clubhouse",
+    "Pets allowed",
+    "Paved access",
+    "Near main road",
+    "Public transport nearby",
+    "School nearby",
+    "Hospital nearby",
+    "Shopping nearby",
+  ],
+  land: [
+    "Security",
+    "Land title available",
+    "Freehold title",
+    "Mailo title",
+    "Leasehold title",
+    "Customary ownership",
+    "Surveyed land",
+    "Boundary markers",
+    "Corner plot",
+    "Road frontage",
+    "Tarmac road access",
+    "Murram road access",
+    "Electricity nearby",
+    "Water nearby",
+    "Boundary wall",
+    "Gated access",
+    "Near main road",
+    "Public transport nearby",
+    "School nearby",
+    "Hospital nearby",
+    "Shopping nearby",
+    "Suitable for residential",
+    "Suitable for commercial",
+    "Suitable for farming",
+  ],
+  commercial: [
+    "Electricity",
+    "Water",
+    "Security",
+    "CCTV",
+    "Parking",
+    "Visitors parking",
+    "Internet",
+    "Air conditioning",
+    "Backup generator",
+    "Solar power",
+    "Water tank",
+    "Septic tank",
+    "Paved access",
+    "Near main road",
+    "Public transport nearby",
+    "Shopping nearby",
+    "Zoned commercial",
+    "Road frontage",
+    "Shop frontage",
+    "Loading bay",
+    "Reception area",
+    "Customer washrooms",
+    "Kitchenette",
+    "Storage room",
+    "High foot traffic",
+    "Three-phase power",
+  ],
+  other: amenityOptions,
+};
 
 function Section({
   title,
+  subtitle,
   children,
 }: {
   title: string;
+  subtitle?: string;
   children: React.ReactNode;
 }) {
   return (
     <section className="space-y-5 border-t border-zinc-200 pt-6 dark:border-zinc-800">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-        {title}
-      </h2>
+      <div>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+          {title}
+        </h2>
+        {subtitle && <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{subtitle}</p>}
+      </div>
       {children}
     </section>
   );
 }
 
+function ConditionalFields({
+  show,
+  children,
+}: {
+  show: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <fieldset disabled={!show} className={show ? "contents" : "hidden"}>
+      {children}
+    </fieldset>
+  );
+}
+
+const propertyTypeLabels: Record<PropertyCategory, string> = {
+  house: "House",
+  apartment: "Apartment",
+  land: "Land",
+  commercial: "Commercial",
+  other: "Other",
+};
+
+const listingTypeLabels: Record<ListingType, string> = {
+  sale: "for sale",
+  rent: "for rent",
+};
+
 export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
   const d = defaults;
+  const [listingType, setListingType] = useState<ListingType>(d?.listing_type ?? "sale");
+  const [propertyCategory, setPropertyCategory] = useState<PropertyCategory>(d?.property_category ?? "house");
   const imageText = d?.image_urls?.length ? d.image_urls.join("\n") : "";
   const selectedAmenities = new Set(d?.amenities ?? []);
   const customAmenities =
     d?.amenities?.filter((a) => !amenityOptions.includes(a)).join("\n") ?? "";
+  const isRental = listingType === "rent";
+  const isLand = propertyCategory === "land";
+  const isHome = propertyCategory === "house" || propertyCategory === "apartment";
+  const isHouse = propertyCategory === "house";
+  const isApartment = propertyCategory === "apartment";
+  const isCommercial = propertyCategory === "commercial";
+  const isOther = propertyCategory === "other";
+  const showRooms = isHome;
+  const showFurnishing = isHome || isCommercial;
+  const showParking = isHome || isCommercial || isOther;
+  const showBuiltSize = isHome || isCommercial || isOther;
+  const showLandSize = isLand || isHouse || isCommercial || isOther;
+  const featureSubtitle = isLand
+    ? "Land listings only need plot size, access, utilities, and nearby services."
+    : isCommercial
+      ? "Commercial listings focus on space, access, parking, and business-ready amenities."
+      : isApartment
+      ? "Apartment listings focus on rooms, furnishing, parking, and usable space."
+        : "Only the details relevant to this property type are shown.";
+  const visibleAmenityOptions = amenityOptionsByCategory[propertyCategory];
 
   return (
     <>
+      <div className="rounded-3xl border border-brand-100 bg-brand-50/70 p-4 dark:border-brand-900/50 dark:bg-brand-950/30">
+        <p className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
+          Smart listing form
+        </p>
+        <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+          You are listing a{" "}
+          <span className="font-semibold text-zinc-950 dark:text-zinc-50">
+            {propertyTypeLabels[propertyCategory]} {listingTypeLabels[listingType]}
+          </span>
+          . The form will only show the details buyers or tenants need for that choice.
+        </p>
+      </div>
+
       <Section title="Listing basics">
         <div>
           <label htmlFor="title" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -105,7 +340,8 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               id="listing_type"
               name="listing_type"
               required
-              defaultValue={d?.listing_type ?? "sale"}
+              value={listingType}
+              onChange={(event) => setListingType(event.target.value as ListingType)}
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             >
               <option value="sale">For sale</option>
@@ -123,7 +359,8 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               id="property_category"
               name="property_category"
               required
-              defaultValue={d?.property_category ?? "house"}
+              value={propertyCategory}
+              onChange={(event) => setPropertyCategory(event.target.value as PropertyCategory)}
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             >
               <option value="house">House</option>
@@ -135,7 +372,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className={`grid gap-4 ${isRental ? "sm:grid-cols-2" : ""}`}>
           <div>
             <label htmlFor="listing_status" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Availability
@@ -152,6 +389,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               <option value="rented">Rented</option>
             </select>
           </div>
+          <ConditionalFields show={isRental}>
           <div>
             <label htmlFor="available_from" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Available from
@@ -164,6 +402,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
           </div>
+          </ConditionalFields>
         </div>
         <label className="flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
           <input
@@ -176,11 +415,11 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
         </label>
       </Section>
 
-      <Section title="Price">
-        <div className="grid gap-4 sm:grid-cols-3">
+      <Section title="Price" subtitle={isRental ? "Set the rental amount and billing period." : "Set the asking price for buyers."}>
+        <div className={`grid gap-4 ${isRental ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
           <div>
             <label htmlFor="price" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Price
+              {isRental ? "Rent amount" : "Price"}
             </label>
             <input
               id="price"
@@ -207,6 +446,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               <option value="USD">USD</option>
             </select>
           </div>
+          <ConditionalFields show={isRental}>
           <div>
             <label htmlFor="rent_period" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Rent period
@@ -224,6 +464,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               <option value="year">Per year</option>
             </select>
           </div>
+          </ConditionalFields>
         </div>
         <label className="flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
           <input
@@ -304,7 +545,8 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
         </div>
       </Section>
 
-      <Section title="Features">
+      <Section title="Property details" subtitle={featureSubtitle}>
+        <ConditionalFields show={showRooms}>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="bedrooms" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -332,6 +574,11 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
           </div>
+          </div>
+        </ConditionalFields>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <ConditionalFields show={showParking}>
           <div>
             <label htmlFor="parking_spaces" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Parking spaces
@@ -345,6 +592,8 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
           </div>
+          </ConditionalFields>
+          <ConditionalFields show={showFurnishing}>
           <div>
             <label htmlFor="furnishing" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Furnishing
@@ -361,12 +610,14 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               <option value="unfurnished">Unfurnished</option>
             </select>
           </div>
+          </ConditionalFields>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
+          <ConditionalFields show={showBuiltSize}>
           <div>
             <label htmlFor="built_size_sqm" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Built size (sqm)
+              {isCommercial ? "Usable floor area (sqm)" : "Built size (sqm)"}
             </label>
             <input
               id="built_size_sqm"
@@ -378,9 +629,11 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
           </div>
+          </ConditionalFields>
+          <ConditionalFields show={showLandSize}>
           <div>
             <label htmlFor="land_size_sqm" className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Land size (sqm)
+              {isLand ? "Plot size (sqm)" : "Land size (sqm)"}
             </label>
             <input
               id="land_size_sqm"
@@ -392,6 +645,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
           </div>
+          </ConditionalFields>
         </div>
 
         <fieldset>
@@ -399,7 +653,7 @@ export function PropertyFormFields({ defaults }: { defaults?: Defaults }) {
             Amenities
           </legend>
           <div className="grid gap-2 sm:grid-cols-2">
-            {amenityOptions.map((amenity) => (
+            {visibleAmenityOptions.map((amenity) => (
               <label
                 key={amenity}
                 className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"

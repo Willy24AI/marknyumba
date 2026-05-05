@@ -16,7 +16,7 @@ export default async function NewListingPage({
   const q = await searchParams;
 
   return (
-    <div className="mx-auto max-w-2xl flex-1 px-4 py-10 sm:px-6">
+    <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
       <Link
         href="/dashboard"
         className="mb-6 inline-flex text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
@@ -26,8 +26,8 @@ export default async function NewListingPage({
       <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
         List a property
       </h1>
-      <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-        Fields mirror what buyers and tenants expect on major portals: type, price, location, and size.
+      <p className="mt-2 max-w-2xl text-zinc-600 dark:text-zinc-400">
+        Choose the listing goal and property type first. The form will then show only the details that match that property.
       </p>
 
       {q.error && (
@@ -36,7 +36,10 @@ export default async function NewListingPage({
         </p>
       )}
 
-      <form action={createProperty} className="mt-8 space-y-6">
+      <form
+        action={createProperty}
+        className="mt-8 space-y-6 rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-6"
+      >
         <PropertyFormFields />
 
         <button
