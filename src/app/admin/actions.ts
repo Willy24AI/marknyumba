@@ -11,6 +11,7 @@ import {
   updateAdminProperty,
   updateProfileRole,
 } from "@/lib/data/admin";
+import { parseSellerReportStatus, updateSellerReportStatus } from "@/lib/data/sellers";
 import { createClient } from "@/lib/supabase/server";
 
 async function requireAdminClient() {
@@ -80,6 +81,19 @@ export async function updateUserRoleAction(formData: FormData) {
   const supabase = await requireAdminClient();
   const role = parseProfileRole(formData.get("role"));
   const { error } = await updateProfileRole(supabase, id, role);
+  if (error) adminError(error);
+
+  revalidatePath("/admin");
+  redirect("/admin");
+}
+
+export async function updateSellerReportStatusAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) adminError("Missing report id.");
+
+  const supabase = await requireAdminClient();
+  const status = parseSellerReportStatus(formData.get("status"));
+  const { error } = await updateSellerReportStatus(supabase, id, status);
   if (error) adminError(error);
 
   revalidatePath("/admin");

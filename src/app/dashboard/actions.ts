@@ -6,6 +6,12 @@ import { deleteProperty, insertProperty, updateProperty } from "@/lib/data/prope
 import { parseCreatePropertyFromFormData } from "@/lib/schemas/property";
 import { createClient } from "@/lib/supabase/server";
 
+function cleanNullableText(value: FormDataEntryValue | null, maxLength: number) {
+  const text = String(value ?? "").trim();
+  if (!text) return null;
+  return text.slice(0, maxLength);
+}
+
 export async function createProperty(formData: FormData) {
   const supabase = await createClient();
   const {
@@ -110,4 +116,29 @@ export async function deletePropertyAction(formData: FormData) {
   revalidatePath("/listings");
   revalidatePath("/dashboard");
   redirect("/dashboard");
+}
+
+export async function updateSellerProfileAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/auth/login?next=/dashboard");
+
+  const patch = {
+    full_name: cleanNullableText(formData.get("full_name"), 120),
+    phone: cleanNullableText(formData.get("phone"), 40),
+    avatar_url: cleanNullableText(formData.get("avatar_url"), 500),
+    seller_business_name: cleanNullableText(formData.get("seller_business_name"), 160),
+    seller_location: cleanNullableText(formData.get("seller_location"), 160),
+    seller_bio: cleanNullableText(formData.get("seller_bio"), 1000),
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await supabase.from("profiles").update(patch).eq("id", user.id);
+  if (error) redirect(`/dashboard?error=${encodeURIComponent(error.message)}`);
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/sellers/${user.id}`);
+  redirect("/dashboard?sellerProfile=updated");
 }

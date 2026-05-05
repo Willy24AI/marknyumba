@@ -5,11 +5,13 @@ import {
   deleteAdminConversationAction,
   deleteAdminListingAction,
   updateAdminListingAction,
+  updateSellerReportStatusAction,
   updateUserRoleAction,
 } from "@/app/admin/actions";
 import { listAdminConversations } from "@/lib/data/messages";
 import { categoryLabel, formatPrice, listingStatusLabel } from "@/lib/format";
 import { getAdminUser, listAdminProfiles, listAdminProperties } from "@/lib/data/admin";
+import { listAdminSellerReports } from "@/lib/data/sellers";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -18,6 +20,17 @@ export const metadata: Metadata = {
 };
 
 type PageProps = { searchParams: Promise<{ error?: string }> };
+
+function reportReasonLabel(reason: string) {
+  const labels: Record<string, string> = {
+    fraud: "Fraud or scam",
+    misleading_listing: "Misleading listing",
+    harassment: "Harassment",
+    unreachable: "Unreachable seller",
+    other: "Other",
+  };
+  return labels[reason] ?? reason;
+}
 
 export default async function AdminPage({ searchParams }: PageProps) {
   const q = await searchParams;
@@ -30,15 +43,18 @@ export default async function AdminPage({ searchParams }: PageProps) {
     { data: properties, error: propertyError },
     { data: profiles, error: profileError },
     { data: conversations, error: conversationError },
+    { data: reports, error: reportError },
   ] = await Promise.all([
     listAdminProperties(supabase),
     listAdminProfiles(supabase),
     listAdminConversations(supabase),
+    listAdminSellerReports(supabase),
   ]);
 
   const publishedCount = properties.filter((p) => p.is_published).length;
   const unpublishedCount = properties.length - publishedCount;
   const adminCount = profiles.filter((p) => p.role === "admin").length;
+  const openReportCount = reports.filter((report) => report.status === "open" || report.status === "reviewing").length;
 
   return (
     <main className="mx-auto max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
@@ -66,12 +82,13 @@ export default async function AdminPage({ searchParams }: PageProps) {
         </p>
       )}
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         {[
           { label: "Listings", value: properties.length },
           { label: "Published", value: publishedCount },
           { label: "Unpublished", value: unpublishedCount },
           { label: "Conversations", value: conversations.length },
+          { label: "Open reports", value: openReportCount },
           { label: "Admins", value: adminCount },
         ].map((stat) => (
           <div
@@ -82,6 +99,79 @@ export default async function AdminPage({ searchParams }: PageProps) {
             <p className="mt-2 text-3xl font-semibold text-zinc-950 dark:text-zinc-50">{stat.value}</p>
           </div>
         ))}
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">Seller reports</h2>
+        {reportError ? (
+          <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            {reportError}
+          </p>
+        ) : (
+          <div className="mt-4 overflow-hidden rounded-3xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+            <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              {reports.slice(0, 10).map((report) => {
+                const seller = Array.isArray(report.profiles) ? report.profiles[0] : report.profiles;
+                const property = Array.isArray(report.properties) ? report.properties[0] : report.properties;
+
+                return (
+                  <li key={report.id} className="grid gap-4 p-4 lg:grid-cols-[1fr_auto] lg:items-center">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap gap-2">
+                        <span className="rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700 dark:bg-red-950/40 dark:text-red-300">
+                          {reportReasonLabel(report.reason)}
+                        </span>
+                        <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                          {report.status}
+                        </span>
+                      </div>
+                      <Link
+                        href={`/sellers/${report.seller_id}`}
+                        className="mt-2 block truncate font-semibold text-zinc-950 hover:text-brand-700 dark:text-zinc-50"
+                      >
+                        {seller?.full_name || seller?.email || "Seller profile"}
+                      </Link>
+                      {property && (
+                        <Link
+                          href={`/listings/${property.id}`}
+                          className="mt-1 block truncate text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
+                        >
+                          {property.title} - {property.city}
+                        </Link>
+                      )}
+                      <p className="mt-2 line-clamp-3 text-sm text-zinc-600 dark:text-zinc-400">{report.details}</p>
+                      <p className="mt-2 text-xs text-zinc-400">
+                        Reported {new Date(report.created_at).toLocaleString()} by {report.reporter_id}
+                      </p>
+                    </div>
+                    <form action={updateSellerReportStatusAction} className="flex flex-wrap items-center gap-2">
+                      <input type="hidden" name="id" value={report.id} />
+                      <select
+                        name="status"
+                        defaultValue={report.status}
+                        className="min-h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm dark:border-zinc-700 dark:bg-zinc-950"
+                      >
+                        <option value="open">Open</option>
+                        <option value="reviewing">Reviewing</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="dismissed">Dismissed</option>
+                      </select>
+                      <button
+                        type="submit"
+                        className="min-h-10 rounded-xl bg-zinc-900 px-4 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950"
+                      >
+                        Update
+                      </button>
+                    </form>
+                  </li>
+                );
+              })}
+              {reports.length === 0 && (
+                <li className="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">No seller reports yet.</li>
+              )}
+            </ul>
+          </div>
+        )}
       </section>
 
       <section className="mt-10">

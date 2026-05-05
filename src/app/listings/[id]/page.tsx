@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FavoriteButton } from "@/components/favorite-button";
 import { MessageComposer } from "@/components/message-composer";
+import { SellerRating } from "@/components/seller-rating";
 import {
   categoryLabel,
   formatPrice,
@@ -14,6 +15,7 @@ import {
 import { getConversationForPropertyBuyer } from "@/lib/data/messages";
 import { getProfileRole } from "@/lib/data/admin";
 import { getPropertyById, getPropertyMeta } from "@/lib/data/properties";
+import { getSellerProfile, getSellerReviewSummary, sellerDisplayName } from "@/lib/data/sellers";
 import { getBrowseContext } from "@/lib/data/viewer";
 import { regionLabel } from "@/lib/locations/uganda";
 import { createClientOptional } from "@/lib/supabase/server";
@@ -71,6 +73,15 @@ function contactIconTone(kind: ContactKind) {
   return "bg-emerald-50 text-emerald-600 ring-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-900/60";
 }
 
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const supabase = await createClientOptional();
@@ -98,6 +109,11 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
 
   const isOwner = user?.id === property.owner_id;
   const { userId, favoriteIds } = await getBrowseContext();
+  const [{ data: sellerProfile }, sellerSummary] = await Promise.all([
+    getSellerProfile(supabase, property.owner_id),
+    getSellerReviewSummary(supabase, property.owner_id),
+  ]);
+  const sellerName = sellerDisplayName(sellerProfile, property.seller_name);
 
   const { data: existingConv } =
     userId && !isOwner
@@ -292,6 +308,36 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
           Ask about viewings, price, or what is included. Your messages stay on Mark Nyumba.
         </p>
+
+        <Link
+          href={`/sellers/${property.owner_id}`}
+          className="mt-4 flex items-center gap-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 transition hover:border-brand-200 hover:bg-brand-50/50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-brand-900 dark:hover:bg-brand-950/30"
+        >
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-brand-100 text-lg font-semibold text-brand-800 dark:bg-brand-950 dark:text-brand-200">
+            {sellerProfile?.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={sellerProfile.avatar_url} alt="" className="h-full w-full object-cover" />
+            ) : (
+              initials(sellerName)
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="truncate font-semibold text-zinc-950 dark:text-zinc-50">{sellerName}</p>
+              {sellerProfile?.seller_verified && (
+                <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+                  Verified
+                </span>
+              )}
+            </div>
+            <div className="mt-1">
+              <SellerRating summary={sellerSummary} compact />
+            </div>
+          </div>
+          <span className="hidden rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 sm:inline-flex">
+            View profile
+          </span>
+        </Link>
 
         {(property.seller_name || contactLinks.length > 0) && (
           <div
