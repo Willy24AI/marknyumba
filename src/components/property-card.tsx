@@ -23,9 +23,9 @@ export function PropertyCard({ property, viewerUserId, favoriteIds }: Props) {
     <div className="relative h-full">
       <Link
         href={`/listings/${property.id}`}
-        className="group flex h-full overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-xl hover:shadow-zinc-200/70 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-900 dark:hover:shadow-black/20 sm:flex-col sm:rounded-3xl"
+        className="group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-xl hover:shadow-zinc-200/70 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-900 dark:hover:shadow-black/20 sm:rounded-3xl"
       >
-        <div className="relative aspect-square w-32 shrink-0 overflow-hidden bg-zinc-100 dark:bg-zinc-800 sm:aspect-[4/3] sm:w-auto">
+        <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image}

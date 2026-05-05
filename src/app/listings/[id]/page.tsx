@@ -23,6 +23,54 @@ type Props = {
   searchParams: Promise<{ err?: string }>;
 };
 
+type ContactKind = "phone" | "whatsapp" | "email";
+
+type ContactAction = {
+  kind: ContactKind;
+  label: string;
+  mobileLabel: string;
+  href: string;
+  external?: boolean;
+};
+
+function ContactIcon({ kind }: { kind: ContactKind }) {
+  if (kind === "email") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M4 6h16v12H4z" />
+        <path d="m4 7 8 6 8-6" />
+      </svg>
+    );
+  }
+
+  if (kind === "whatsapp") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M5.5 19.5 6.4 16A7.5 7.5 0 1 1 9 18.2z" />
+        <path d="M9.5 8.8c.2-.4.3-.4.6-.4h.4c.2 0 .4.1.5.4l.6 1.3c.1.3.1.5-.1.7l-.4.5a4.7 4.7 0 0 0 2.3 2.3l.5-.4c.2-.2.5-.2.7-.1l1.3.6c.3.1.4.3.4.5v.4c0 .3 0 .4-.4.6-.5.3-1.1.4-1.7.3-2.8-.4-5.3-2.9-5.7-5.7-.1-.6 0-1.2.3-1.7z" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z" />
+    </svg>
+  );
+}
+
+function contactIconTone(kind: ContactKind) {
+  if (kind === "whatsapp") {
+    return "bg-[#25D366]/10 text-[#25D366] ring-[#25D366]/20";
+  }
+
+  if (kind === "email") {
+    return "bg-blue-50 text-blue-600 ring-blue-100 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-900/60";
+  }
+
+  return "bg-emerald-50 text-emerald-600 ring-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-900/60";
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const supabase = await createClientOptional();
@@ -70,18 +118,29 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
     property.available_from ? `Available from ${property.available_from}` : null,
   ].filter(Boolean);
   const contactLinks = [
-    property.seller_phone ? { label: `Call ${property.seller_phone}`, href: `tel:${property.seller_phone}` } : null,
+    property.seller_phone
+      ? { kind: "phone", label: `Call ${property.seller_phone}`, mobileLabel: "Call", href: `tel:${property.seller_phone}` }
+      : null,
     property.seller_whatsapp
       ? {
+          kind: "whatsapp",
           label: `WhatsApp ${property.seller_whatsapp}`,
+          mobileLabel: "WhatsApp",
           href: `https://wa.me/${property.seller_whatsapp.replace(/\D/g, "")}`,
+          external: true,
         }
       : null,
-    property.seller_email ? { label: `Email ${property.seller_email}`, href: `mailto:${property.seller_email}` } : null,
-  ].filter(Boolean) as { label: string; href: string }[];
+    property.seller_email
+      ? { kind: "email", label: `Email ${property.seller_email}`, mobileLabel: "Email", href: `mailto:${property.seller_email}` }
+      : null,
+  ].filter(Boolean) as ContactAction[];
 
   return (
-    <article className="mx-auto max-w-4xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
+    <article
+      className={`mx-auto max-w-4xl flex-1 px-4 pt-8 sm:px-6 sm:py-10 ${
+        contactLinks.length > 0 ? "pb-32" : "pb-8"
+      }`}
+    >
       <Link
         href="/listings"
         className="mb-5 inline-flex text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
@@ -235,7 +294,11 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
         </p>
 
         {(property.seller_name || contactLinks.length > 0) && (
-          <div className="mt-4 rounded-2xl bg-zinc-50 p-4 text-sm dark:bg-zinc-950">
+          <div
+            className={`mt-4 rounded-2xl bg-zinc-50 p-4 text-sm dark:bg-zinc-950 ${
+              property.seller_name ? "" : "hidden sm:block"
+            }`}
+          >
             {property.seller_name && (
               <p className="font-semibold text-zinc-900 dark:text-zinc-100">{property.seller_name}</p>
             )}
@@ -245,9 +308,9 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
                   <a
                     key={link.href}
                     href={link.href}
-                    target={link.href.startsWith("http") ? "_blank" : undefined}
-                    rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:text-brand-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noreferrer" : undefined}
+                    className="hidden rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:text-brand-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 sm:inline-flex"
                   >
                     {link.label}
                   </a>
@@ -302,6 +365,28 @@ export default async function ListingDetailPage({ params, searchParams }: Props)
           </div>
         )}
       </section>
+
+      {contactLinks.length > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-white/95 px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3 shadow-[0_-16px_40px_rgba(24,24,27,0.18)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/95 sm:hidden">
+          <div className="mx-auto flex max-w-md gap-2">
+            {contactLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noreferrer" : undefined}
+                aria-label={link.label}
+                className="flex min-h-14 flex-1 flex-col items-center justify-center gap-1.5 rounded-2xl border border-zinc-200 bg-white px-2 text-xs font-semibold text-zinc-800 shadow-sm transition active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
+              >
+                <span className={`flex h-8 w-8 items-center justify-center rounded-full ring-1 ${contactIconTone(link.kind)}`}>
+                  <ContactIcon kind={link.kind} />
+                </span>
+                <span>{link.mobileLabel}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </article>
   );
 }

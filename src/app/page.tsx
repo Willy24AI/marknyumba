@@ -225,7 +225,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
+      <section className="mx-auto hidden w-full max-w-7xl px-4 py-8 sm:block sm:px-6 sm:py-16 lg:px-8">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="hidden text-sm font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-400 sm:block">
